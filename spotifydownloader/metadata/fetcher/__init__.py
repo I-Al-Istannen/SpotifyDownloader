@@ -1,0 +1,2 @@
+from metadata.fetcher.MetadataFetcher import MetadataFetcher
+from metadata.fetcher.SpotifyMetadataFetcher import SpotifyMetadataFetcher

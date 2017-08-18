@@ -1,0 +1,5 @@
+spotifydownloader/spotifyapi/Credentials.py
+*.iml
+Music*/
+.env/
+Playlist_Tmp/
