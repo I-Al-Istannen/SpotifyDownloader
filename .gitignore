@@ -3,3 +3,6 @@ spotifydownloader/spotifyapi/Credentials.py
 Music*/
 .env/
 Playlist_Tmp/
+.idea/
+out/
+**/__pycache__
