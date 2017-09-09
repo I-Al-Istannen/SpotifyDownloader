@@ -56,6 +56,9 @@ def download_spotify_song(
           ColorCodes.BLUE + "Tagging:" + ColorCodes.RESET + " In progress",
           end=""
     )
+
+    Normalizer.normalize(Config.tmp_folder, output_file)
+
     if not inject_metadata(output_file, metadata):
         print("\r", end="")
         print("Unable to inject metadata to '{0}'".format(output_file))
@@ -64,8 +67,6 @@ def download_spotify_song(
           "\r" + ColorCodes.BLUE + "Tagging: "
           + ColorCodes.GREEN + "Done." + " " * 25 + ColorCodes.RESET
     )
-
-    Normalizer.normalize(Config.tmp_folder, output_file)
 
 
 def fetch_metadata(spotify_track_id: str) -> Optional[Metadata]:
