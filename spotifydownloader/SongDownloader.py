@@ -57,7 +57,14 @@ def download_spotify_song(
           end=""
     )
 
-    Normalizer.normalize(Config.tmp_folder, output_file)
+    if not Normalizer.normalize(Config.tmp_folder, output_file):
+        print(
+              ColorCodes.RED
+              + "Deleting generated file as a critical error occurred..."
+              + ColorCodes.RESET
+        )
+        os.remove(output_file)
+        return
 
     if not inject_metadata(output_file, metadata):
         print("\r", end="")

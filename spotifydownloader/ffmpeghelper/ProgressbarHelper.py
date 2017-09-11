@@ -52,6 +52,9 @@ def execute_with_bar(
 
     if process.returncode != 0:
         output = "\n".join(lines)
+        print("Return code:", process.returncode)
+        print("Output:\n", output)
+        print("Command line:", " ".join(command_line))
         raise subprocess.CalledProcessError("Non-zero return code",
                                             process.returncode,
                                             output)

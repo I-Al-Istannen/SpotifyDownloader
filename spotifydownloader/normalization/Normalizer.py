@@ -8,14 +8,32 @@ from util import ColorCodes as Color
 
 
 def normalize(
-      tmp_folder: str, file: str, target_i=-16, target_lra=11, target_tp=-1.5):
+      tmp_folder: str, file: str, target_i=-16, target_lra=11, target_tp=-1.5
+) -> bool:
     if not os.path.exists(tmp_folder):
         os.makedirs(tmp_folder)
 
     output_json = __first_pass(file, target_i, target_lra, target_tp)
 
+    if "inf" in output_json["input_i"] \
+          or "inf" in output_json["input_tp"] \
+          or "inf" in output_json["input_lra"] \
+          or "inf" in output_json["input_thresh"] \
+          or "inf" in output_json["target_offset"]:
+        prefix = "\r" + Color.BLUE + "Normalizing" + Color.RESET + " ("
+        prefix = prefix \
+                 + Color.PURPLE + Color.BOLD + "1st" + Color.RESET + " pass): "
+
+        prefix = prefix + Color.RED + Color.BOLD + \
+                 "Unsuccessful, measured values out of bounds. Does the file" \
+                 " contain audio?" + Color.RESET
+        print(prefix)
+        return False
+
     __second_pass(tmp_folder, file, output_json, target_i, target_lra,
                   target_tp)
+
+    return True
 
 
 def __first_pass(input_file, target_i, target_lra, target_tp) -> dict:
