@@ -45,15 +45,21 @@ def fetch_album_information(album_id: str) -> dict:
 def fetch_playlist_tracks_and_name(user_id: str, playlist_id: str) -> \
       Tuple[str, List[str]]:
     tracks = []
-    response = spotify.user_playlist(user=user_id,
-                                     playlist_id=playlist_id)
+    response: dict = spotify.user_playlist(user=user_id,
+                                           playlist_id=playlist_id)
 
     playlist_name = response["name"]
 
     while response:
-        for item in response["tracks"]["items"]:
+        if "tracks" in response:
+            items = response["tracks"]["items"]
+            paging_object = response["tracks"]
+        else:
+            items = response["items"]
+            paging_object = response
+        for item in items:
             track_id = item["track"]["id"]
             tracks.append(track_id)
-        response = spotify.next(response["tracks"])
+        response = spotify.next(paging_object)
 
     return playlist_name, tracks
