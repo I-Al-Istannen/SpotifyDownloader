@@ -25,7 +25,8 @@ def with_api(f):
 
         try:
             return f(*args, **kwargs)
-        except spotipy.oauth2.SpotifyOauthError:
+        except spotipy.client.SpotifyException:
+            spotify = spotipy.Spotify(auth=__generate_token())
             decorated(counter=counter + 1, *args, **kwargs)
 
     return decorated
