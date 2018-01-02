@@ -12,6 +12,18 @@ from spotifyapi import PlaylistIO
 from util import ColorCodes
 
 
+def _tag_file(file: str, track_id :str):
+    metadata = SongDownloader.fetch_metadata(track_id)
+
+    if not metadata:
+        print("Could not find metadata for song id {}".format(track_id))
+        return
+
+    if SongDownloader.inject_metadata(file, metadata):
+        print("Succesfully injected the metadata ({} - {}) in '{}'.".format(metadata.title, metadata.album, file))
+    else:
+        print("Error injecting metadata into '{}'", file)
+
 def _download_playlist_tracks(url: str):
     print(
           ColorCodes.YELLOW + "Output file:",
@@ -75,6 +87,13 @@ if __name__ == '__main__':
 
     if parsed.output_folder:
         Config.output_folder = parsed.output_folder
+
+    if parsed.tag_song:
+        if not parsed.file:
+            print("I also need the '-f, --file' argument to know where to inject to!")
+            exit(1)
+        _tag_file(parsed.file, parsed.tag_song)
+        exit(0)
 
     if parsed.download_playlist:
         _download_playlist_tracks(parsed.download_playlist)

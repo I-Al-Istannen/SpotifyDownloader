@@ -10,5 +10,9 @@ def get_argument_parser() -> ArgumentParser:
                         metavar="output-folder")
     parser.add_argument("-r", "--redownload", dest="redownload_if_exists",
                         metavar="redownload-if-exists")
+    parser.add_argument("-t", "--tag-song", dest="tag_song",
+                        metavar="TRACK-ID")
+    parser.add_argument("-f", "--file", dest="file",
+                        metavar="FILE")
 
     return parser
