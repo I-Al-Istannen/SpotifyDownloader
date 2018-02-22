@@ -5,7 +5,7 @@ import Config
 import PathHelper
 from conversion import FfmpegConverter, Converter
 from downloader import Downloader
-from downloader import YoutubeDownloader
+from downloader.YoutubeDlDownloader import YoutubeDlDownloader
 from metadata import Metadata
 from metadata.fetcher import SpotifyMetadataFetcher, MetadataFetcher
 from metadata.injector import MutagenMetadataInjector, MetadataInjector
@@ -14,7 +14,7 @@ from searching.Base import SongSearcher
 from searching.Youtube import YoutubeSearcher
 from util import ColorCodes
 
-downloaders: List[Downloader] = [YoutubeDownloader()]
+downloaders: List[Downloader] = [YoutubeDlDownloader()]
 converters: List[Converter] = [FfmpegConverter()]
 metadata_fetchers: List[MetadataFetcher] = [SpotifyMetadataFetcher()]
 metadata_injectors: List[MetadataInjector] = [MutagenMetadataInjector()]
@@ -22,12 +22,12 @@ searchers: List[SongSearcher] = [YoutubeSearcher()]
 
 
 def download_spotify_song(
-      spotify_track_id: str, output_folder: str, redownload_if_exists: bool):
+        spotify_track_id: str, output_folder: str, redownload_if_exists: bool):
     metadata = fetch_metadata(spotify_track_id)
     if not metadata:
         print(
-              "No metadata found for track with it '{}'".format(
-                    spotify_track_id)
+            "No metadata found for track with it '{}'".format(
+                spotify_track_id)
         )
         return
 
@@ -53,15 +53,15 @@ def download_spotify_song(
         return
 
     print(
-          ColorCodes.BLUE + "Tagging:" + ColorCodes.RESET + " In progress",
-          end=""
+        ColorCodes.BLUE + "Tagging:" + ColorCodes.RESET + " In progress",
+        end=""
     )
 
     if not Normalizer.normalize(Config.tmp_folder, output_file):
         print(
-              ColorCodes.RED
-              + "Deleting generated file as a critical error occurred..."
-              + ColorCodes.RESET
+            ColorCodes.RED
+            + "Deleting generated file as a critical error occurred..."
+            + ColorCodes.RESET
         )
         os.remove(output_file)
         return
@@ -71,8 +71,8 @@ def download_spotify_song(
         print("Unable to inject metadata to '{0}'".format(output_file))
         return
     print(
-          "\r" + ColorCodes.BLUE + "Tagging: "
-          + ColorCodes.GREEN + "Done." + " " * 25 + ColorCodes.RESET
+        "\r" + ColorCodes.BLUE + "Tagging: "
+        + ColorCodes.GREEN + "Done." + " " * 25 + ColorCodes.RESET
     )
 
 
