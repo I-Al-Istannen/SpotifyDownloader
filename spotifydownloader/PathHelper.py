@@ -1,4 +1,5 @@
 import os
+import tempfile
 from re import sub
 
 
@@ -17,7 +18,7 @@ def get_tmp_file(name: str):
 
 
 def __get_and_create_tmp_dir():
-    path = "/tmp/SpotifyDownloader"
+    path = os.path.join(tempfile.gettempdir(), "SpotifyDownloader")
 
     if not os.path.exists(path):
         os.mkdir(path)

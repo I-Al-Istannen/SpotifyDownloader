@@ -22,3 +22,6 @@ class YoutubeDlDownloader(Downloader):
 
     def can_download(self, url: str):
         return "youtube.com" in url
+
+    def needs_conversion(self):
+        return False

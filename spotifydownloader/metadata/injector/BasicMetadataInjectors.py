@@ -14,9 +14,12 @@ from metadata.injector.Base import MetadataInjector
 
 class MutagenMetadataInjector(MetadataInjector):
     def can_inject(self, file: str):
-        return "audio/mpeg" in check_output(
-              shlex.split("file -i \"{0}\"".format(file))
-        ).decode()
+        try:
+            return "audio/mpeg" in check_output(
+                shlex.split("file -i \"{0}\"".format(file))
+            ).decode()
+        except FileNotFoundError: # file not installed, e.g. on windows
+            return True
 
     def inject(self, file: str, metadata: Metadata):
         try:

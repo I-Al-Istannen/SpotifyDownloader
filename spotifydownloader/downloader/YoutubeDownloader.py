@@ -18,3 +18,6 @@ class YoutubeDownloader(Downloader):
         best_audio.download(filepath=target_file)
 
         print()
+
+    def needs_conversion(self):
+        return True

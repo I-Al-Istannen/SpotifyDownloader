@@ -1,5 +1,6 @@
 import re
 import subprocess
+import os
 from io import TextIOWrapper
 from typing import List
 
@@ -23,16 +24,17 @@ def execute_with_bar(
           stderr=subprocess.STDOUT,
     )
     duration = "Unknown"
-
+    
     lines = []
 
     while True:
         line = __read_until_carriage_return(process.stdout)
         if not line:
             break
-
-        if line.endswith("\n"):
-            lines = lines + line.splitlines()
+            
+        if line.endswith("\n") or line.startswith("\n"):
+            new_lines = [x for x in line.splitlines() if x] # check for empty strings
+            lines = lines + new_lines
 
         if "Duration:" in line:
             duration = __extract_duration(line)
@@ -51,7 +53,7 @@ def execute_with_bar(
     print(end.format(prefix=prefix), end="")
 
     if process.returncode != 0:
-        output = "\n".join(lines)
+        output = os.linesep.join(lines)
         print("Return code:", process.returncode)
         print("Output:\n", output)
         print("Command line:", " ".join(command_line))

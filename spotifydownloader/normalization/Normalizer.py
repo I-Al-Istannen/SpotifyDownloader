@@ -58,10 +58,12 @@ def __first_pass(input_file, target_i, target_lra, target_tp) -> dict:
     end = "\r{prefix}: " + Color.GREEN + "Done" + Color.RESET
 
     first_pass_output = ProgressbarHelper.execute_with_bar(
-          ffmpeg_args, prefix, end)[-12:]
+          ffmpeg_args, prefix, end)
+          
+    first_pass_output = first_pass_output[-12:]
 
     first_pass_output = "\n".join(first_pass_output)
-
+    
     return json.loads(first_pass_output)
 
 

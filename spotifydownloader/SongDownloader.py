@@ -1,4 +1,5 @@
 import os
+import shutil
 from typing import List, Optional
 
 import Config
@@ -30,7 +31,7 @@ def download_spotify_song(
                 spotify_track_id)
         )
         return
-
+        
     file_name = "{0} - {1}".format(metadata.title, metadata.artists[0])
     output_file = PathHelper.get_output_file(file_name, output_folder)
 
@@ -44,14 +45,19 @@ def download_spotify_song(
         return
 
     tmp_file = PathHelper.get_tmp_file(file_name)
-    if not download_song(url, tmp_file):
+    used_downloader = download_song(url, tmp_file)
+    if not used_downloader:
         print("Error downloading a song from '{0}'".format(url))
         return
-
-    if not convert_song(tmp_file, output_file):
-        print("Error converting song '{0}'".format(tmp_file))
-        return
-
+    print("Downloaded to '{}'".format(tmp_file))
+    
+    if used_downloader.needs_conversion():
+        if not convert_song(tmp_file, output_file):
+            print("Error converting song '{0}'".format(tmp_file))
+            return
+    else:
+        shutil.copy(tmp_file, output_file)
+            
     print(
         ColorCodes.BLUE + "Tagging:" + ColorCodes.RESET + " In progress",
         end=""
@@ -92,12 +98,12 @@ def search_song(metadata: Metadata) -> Optional[str]:
     return None
 
 
-def download_song(url: str, target_file: str) -> bool:
+def download_song(url: str, target_file: str) -> Optional[Downloader]:
     for downloader in downloaders:
         if downloader.can_download(url):
             downloader.download(url, target_file)
-            return True
-    return False
+            return downloader
+    return None
 
 
 def convert_song(input_file: str, output_file: str):

@@ -20,3 +20,9 @@ class Downloader(ABC):
         :param url: The url to check
         """
         pass
+    
+    @abstractmethod
+    def needs_conversion(self) -> bool:
+        """Checks if this downloader downloads a mp3, or if the file needs conversion
+        """
+        pass
